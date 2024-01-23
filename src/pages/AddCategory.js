@@ -6,14 +6,16 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { toast } from "react-toastify";
 import {
-  RESET_PCategory,
+  RESET_PCATEGORY,
   createProductsCategory,
 } from "../features/pCategory/pCategorySlice";
 
+console.log("1");
 let pCategorySchema = Yup.object().shape({
   title: Yup.string().required("Category is required"),
 });
 const AddCategory = () => {
+  console.log("2");
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const formik = useFormik({
@@ -21,10 +23,13 @@ const AddCategory = () => {
       title: "",
     },
     validationSchema: pCategorySchema,
-    onSubmit: (values) => {
-      dispatch(createProductsCategory(values));
+    onSubmit: async (values) => {
+      console.log("3");
+      await dispatch(createProductsCategory(values));
+      console.log("4");
       formik.resetForm();
       setTimeout(() => {
+        console.log("5");
         navigate("/admin/category-list", { replace: true });
       }, 3000);
     },
@@ -33,14 +38,19 @@ const AddCategory = () => {
     (state) => state.pCategory
   );
   useEffect(() => {
+    console.log("6");
     if (isSuccess && pCategory) {
-      toast.success("Brand Added Successfully");
+      toast.success("Category Added Successfully");
+      console.log("7");
     }
     if (isError) {
       toast.error("Something went wrong");
     }
-    dispatch(RESET_PCategory());
+    console.log("8");
+    dispatch(RESET_PCATEGORY());
+    console.log("9");
   }, [isLoading, isSuccess, isError, pCategory, dispatch]);
+  console.log("10");
   return (
     <div>
       <h3 className="mb-4 title">Add Category</h3>

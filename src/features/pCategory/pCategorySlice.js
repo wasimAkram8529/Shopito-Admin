@@ -46,11 +46,12 @@ export const pCategorySlice = createSlice({
   name: "pCategory",
   initialState,
   reducers: {
-    RESET_PCategory(state) {
+    RESET_PCATEGORY(state) {
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
       state.message = "";
+      console.log("Reset");
     },
   },
   extraReducers: (builder) => {
@@ -93,5 +94,5 @@ export const pCategorySlice = createSlice({
   },
 });
 
-export const { RESET_PCategory } = pCategorySlice.actions;
+export const { RESET_PCATEGORY } = pCategorySlice.actions;
 export default pCategorySlice.reducer;

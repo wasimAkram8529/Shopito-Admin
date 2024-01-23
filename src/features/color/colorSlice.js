@@ -26,11 +26,28 @@ export const getColor = createAsyncThunk(
   }
 );
 
+export const createColor = createAsyncThunk(
+  "color/create-color",
+  async (data, thunkAPI) => {
+    try {
+      return await colorService.createColor(data);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
 export const colorSlice = createSlice({
   name: "color",
   initialState,
   reducers: {
-    RESET_AUTH(state) {
+    RESET_COLOR(state) {
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
@@ -56,9 +73,26 @@ export const colorSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         state.colors = null;
+      }) // create Color
+      .addCase(createColor.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(createColor.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.colors = action.payload;
+        //console.log(state.customers);
+      })
+      .addCase(createColor.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        state.colors = null;
       });
   },
 });
 
-export const { RESET_AUTH } = colorSlice.actions;
+export const { RESET_COLOR } = colorSlice.actions;
 export default colorSlice.reducer;
