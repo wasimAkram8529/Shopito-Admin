@@ -2,8 +2,21 @@ import axios from "axios";
 
 const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 export const API_URL = `${BACKEND_URL}/api/color/`;
+
 const getColor = async () => {
   const response = await axios.get(API_URL);
+  return response.data;
+};
+const getAColor = async (id) => {
+  const response = await axios.get(API_URL + `${id}`);
+  return response.data;
+};
+const updateColor = async (id, data) => {
+  const response = await axios.patch(API_URL + `${id}`, data);
+  return response.data;
+};
+const deleteColor = async (id) => {
+  const response = await axios.delete(API_URL + `${id}`);
   return response.data;
 };
 
@@ -15,6 +28,9 @@ const createColor = async (data) => {
 const colorService = {
   getColor,
   createColor,
+  getAColor,
+  updateColor,
+  deleteColor,
 };
 
 export default colorService;

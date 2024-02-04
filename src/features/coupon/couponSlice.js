@@ -1,20 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import productService from "./productService";
+import couponService from "./couponService";
 import { toast } from "react-toastify";
 
 const initialState = {
-  products: [],
+  coupons: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
   message: "",
 };
 
-export const getProducts = createAsyncThunk(
-  "products/get-products",
+export const getCoupon = createAsyncThunk(
+  "coupons/get-coupons",
   async (thunkAPI) => {
     try {
-      return await productService.getProducts();
+      return await couponService.getCoupon();
     } catch (error) {
       const message =
         (error.response &&
@@ -27,11 +27,11 @@ export const getProducts = createAsyncThunk(
   }
 );
 
-export const getAProduct = createAsyncThunk(
-  "products/get-A-product",
+export const getACoupon = createAsyncThunk(
+  "coupons/get-A-coupons",
   async (id, thunkAPI) => {
     try {
-      return await productService.getAProduct(id);
+      return await couponService.getACoupon(id);
     } catch (error) {
       const message =
         (error.response &&
@@ -44,28 +44,12 @@ export const getAProduct = createAsyncThunk(
   }
 );
 
-export const updateProduct = createAsyncThunk(
-  "products/update-product",
+export const updateCoupon = createAsyncThunk(
+  "coupons/update-coupons",
   async (payload, thunkAPI) => {
     try {
       const { id, data } = payload;
-      return await productService.updateProduct(id, data);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-export const createProduct = createAsyncThunk(
-  "products/create-product",
-  async (data, thunkAPI) => {
-    try {
-      return await productService.createProduct(data);
+      return await couponService.updateCoupon(id, data);
     } catch (error) {
       const message =
         (error.response &&
@@ -78,12 +62,11 @@ export const createProduct = createAsyncThunk(
   }
 );
 
-// Delete A Product
-export const deleteProduct = createAsyncThunk(
-  "products/delete-product",
+export const deleteCoupon = createAsyncThunk(
+  "coupons/delete-coupons",
   async (id, thunkAPI) => {
     try {
-      return await productService.deleteProduct(id);
+      return await couponService.deleteCoupon(id);
     } catch (error) {
       const message =
         (error.response &&
@@ -96,12 +79,29 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-export const productSlice = createSlice({
-  name: "products",
+export const createCoupon = createAsyncThunk(
+  "coupons/create-coupon",
+  async (data, thunkAPI) => {
+    try {
+      return await couponService.createCoupon(data);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+export const couponSlice = createSlice({
+  name: "coupons",
   initialState,
   reducers: {
-    RESET_PRODUCT(state) {
-      state.products = [];
+    RESET_COUPON(state) {
+      state.coupons = [];
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
@@ -109,98 +109,96 @@ export const productSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Get Products
+    // Get Brands
     builder
-      .addCase(getProducts.pending, (state) => {
+      .addCase(getCoupon.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getProducts.fulfilled, (state, action) => {
+      .addCase(getCoupon.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = action.payload;
-        //console.log(state.customers);
+        state.coupons = action.payload;
       })
-      .addCase(getProducts.rejected, (state, action) => {
+      .addCase(getCoupon.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        state.products = [];
-      }) // Create Product
-      .addCase(getAProduct.pending, (state) => {
+        state.coupons = null;
+      }) // Create Brand
+      .addCase(createCoupon.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getAProduct.fulfilled, (state, action) => {
+      .addCase(createCoupon.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = action.payload;
-        //console.log(state.customers);
+        state.coupons = action.payload;
+        toast.success("coupon Added Successfully");
       })
-      .addCase(getAProduct.rejected, (state, action) => {
+      .addCase(createCoupon.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        state.products = [];
-      }) // Create Product
-      .addCase(createProduct.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createProduct.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.products = action.payload;
-        toast.success("Product Added Successfully");
-      })
-      .addCase(createProduct.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-        state.products = [];
+        state.coupons = null;
         toast.error("Something went wrong");
       })
-      .addCase(updateProduct.pending, (state) => {
+      .addCase(getACoupon.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateProduct.fulfilled, (state, action) => {
+      .addCase(getACoupon.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = [];
-        toast.success("Product Update Successfully");
+        state.coupons = action.payload;
       })
-      .addCase(updateProduct.rejected, (state, action) => {
+      .addCase(getACoupon.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        state.products = [];
+        state.coupons = [];
+      }) // Update A Coupon
+      .addCase(updateCoupon.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateCoupon.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.coupons = action.payload;
+        toast.success("coupon Updation Successfully");
+      })
+      .addCase(updateCoupon.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        state.coupons = [];
         toast.error("Something went wrong");
-      })
-      .addCase(deleteProduct.pending, (state) => {
+      }) // Delete  A Coupon
+      .addCase(deleteCoupon.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deleteProduct.fulfilled, (state, action) => {
+      .addCase(deleteCoupon.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = [];
-        toast.success("Product Delete Successfully");
+        state.coupons = [];
+        toast.success("coupon deletion Successfully");
       })
-      .addCase(deleteProduct.rejected, (state, action) => {
+      .addCase(deleteCoupon.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        state.products = [];
+        state.coupons = [];
         toast.error("Something went wrong");
       });
   },
 });
 
-export const { RESET_PRODUCT } = productSlice.actions;
-export default productSlice.reducer;
+export const { RESET_COUPON } = couponSlice.actions;
+export default couponSlice.reducer;

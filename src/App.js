@@ -24,6 +24,10 @@ import AddProduct from "./pages/AddProduct";
 import { useDispatch } from "react-redux";
 import { useEffect } from "react";
 import { getLoginStatus } from "./features/auth/authSlice";
+import AddCoupon from "./pages/AddCoupon";
+import CouponList from "./pages/CouponList";
+import ViewEnquiry from "./pages/ViewEnquiry";
+import ViewOrder from "./pages/ViewOrder";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -36,21 +40,42 @@ function App() {
       <Routes>
         <Route path="/admin" element={<MainLayout />}>
           <Route index element={<Dashboard />} />
+
           <Route path="enquiries" element={<Enquiries />} />
-          <Route path="blog-list" element={<BlogList />} />
-          <Route path="blog-category-list" element={<BlogCategoryList />} />
+          <Route path="enquiries/:id" element={<ViewEnquiry />} />
+
           <Route path="orders" element={<Orders />} />
+          <Route path="order/:id" element={<ViewOrder />} />
+
           <Route path="customers" element={<Customers />} />
-          <Route path="color-list" element={<ColorList />} />
-          <Route path="category-list" element={<CategoryList />} />
-          <Route path="brand-list" element={<BrandList />} />
-          <Route path="product-list" element={<ProductList />} />
-          <Route path="blog" element={<AddBlog />} />
-          <Route path="blog-category" element={<AddBlogCat />} />
+
           <Route path="color" element={<AddColor />} />
+          <Route path="color-list" element={<ColorList />} />
+          <Route path="color/:id" element={<AddColor />} />
+
           <Route path="category" element={<AddCategory />} />
+          <Route path="category-list" element={<CategoryList />} />
+          <Route path="category/:id" element={<AddCategory />} />
+
           <Route path="brand" element={<AddBrand />} />
+          <Route path="brand-list" element={<BrandList />} />
+          <Route path="brand/update-brand/:id" element={<AddBrand />} />
+
           <Route path="add-product" element={<AddProduct />} />
+          <Route path="product-list" element={<ProductList />} />
+          <Route path="product/:id" element={<AddProduct />} />
+
+          <Route path="blog" element={<AddBlog />} />
+          <Route path="blog/:id" element={<AddBlog />} />
+          <Route path="blog-list" element={<BlogList />} />
+
+          <Route path="blog-category" element={<AddBlogCat />} />
+          <Route path="blog-category/:id" element={<AddBlogCat />} />
+          <Route path="blog-category-list" element={<BlogCategoryList />} />
+
+          <Route path="coupon" element={<AddCoupon />} />
+          <Route path="coupon-list" element={<CouponList />} />
+          <Route path="coupon/:id" element={<AddCoupon />} />
         </Route>
         <Route path="/" element={<Login />} />
         <Route path="/reset-Password" element={<ResetPassword />} />

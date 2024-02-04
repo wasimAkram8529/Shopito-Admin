@@ -9,12 +9,10 @@ const userDefaultState = {
   mobile: null,
   token: null,
 };
-// const getUserFromLS = localStorage.getItem("user")
-//   ? JSON.parse(localStorage.getItem("user"))
-//   : null;
 
 const initialState = {
   user: userDefaultState,
+  userOrders: [],
   isLoggedIn: false,
   isError: false,
   isLoading: false,
@@ -45,6 +43,24 @@ export const getLoginStatus = createAsyncThunk(
   async (_, thunkAPI) => {
     try {
       return await authService.getLoginStatus();
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+
+// Get A Order
+export const getAOrder = createAsyncThunk(
+  "auth/get-A-oredr",
+  async (id, thunkAPI) => {
+    try {
+      return await authService.getAOrder(id);
     } catch (error) {
       const message =
         (error.response &&
@@ -98,6 +114,21 @@ export const authSlice = createSlice({
         }
       })
       .addCase(getLoginStatus.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.message = action.payload;
+      })
+      .addCase(getAOrder.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(getAOrder.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isSuccess = true;
+        state.isLoggedIn = true;
+        state.user = null;
+        state.userOrders = action.payload;
+      })
+      .addCase(getAOrder.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.message = action.payload;

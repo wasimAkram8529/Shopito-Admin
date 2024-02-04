@@ -3,24 +3,17 @@ import { Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrders } from "../features/order/orderSlice";
 import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { formatDate } from "../utils/importantFunctions";
+import { getAOrder } from "../features/auth/authSlice";
 const columns = [
   {
     title: "SNo",
     dataIndex: "key",
   },
   {
-    title: "Order ID",
-    dataIndex: "orderId",
-  },
-  {
-    title: "Order Date",
-    dataIndex: "orderDate",
-  },
-  {
-    title: "Customer Info",
-    dataIndex: "customerInfo",
+    title: "Order Category",
+    dataIndex: "orderCategory",
   },
   {
     title: "View Order",
@@ -40,37 +33,40 @@ const columns = [
   },
 ];
 
-const Orders = () => {
+const ViewOrder = () => {
   const dispatch = useDispatch();
+  const location = useLocation();
+  const getOrderId = location.pathname.split("/")[3];
+
   useEffect(() => {
-    dispatch(getOrders());
-  }, [dispatch]);
-  const { orders, isLoading } = useSelector((state) => state.order);
+    dispatch(getAOrder(getOrderId));
+  }, [getOrderId]);
+
+  const { userOrders, isLoading } = useSelector((state) => state.auth);
+  console.log(userOrders);
+
   let count = 0;
   let sNumber = function increment() {
     return ++count;
   };
   const data1 = [];
-
-  if (!isLoading && orders.length !== 0) {
-    for (let i = 0; i < orders.length; i++) {
-      const inputDateString = orders[i].createdAt;
-      const formattedDateString = formatDate(inputDateString);
-
+  if (!isLoading && userOrders[0].products.length !== 0) {
+    for (let i = 0; i < userOrders[0].products.length; i++) {
       data1.push({
         key: sNumber(),
-        orderId: `11010${i + 1}`,
-        orderDate: formattedDateString,
-        customerInfo: orders[i].orderby.firstName + orders[i].orderby.lastName,
+        orderCategory: userOrders[0].products[i].product.category,
         viewOrder: (
-          <Link className="" to={`/admin/order/${orders[i]._id}`}>
+          <Link
+            className=""
+            to={`/admin/order/${userOrders[0].products[i].product._id}`}
+          >
             Click Here
           </Link>
         ),
-        totalAmount: orders[i].paymentIntent.amount,
+        totalAmount: userOrders[0].products[i].product.price,
         orderStatus: (
           <select className="form-control form-select">
-            <option defaultChecked>{orders[i].orderStatus}</option>
+            <option defaultChecked>{userOrders[0].orderStatus}</option>
             <option value="Not Processed">Not Processed</option>
             <option value="Processing">Processing</option>
             <option value="Dispatched">Dispatched</option>
@@ -93,7 +89,7 @@ const Orders = () => {
   }
   return (
     <div>
-      <h3 className="mb-4 title">Orders</h3>
+      <h3 className="mb-4 title">View Order</h3>
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
@@ -101,4 +97,4 @@ const Orders = () => {
   );
 };
 
-export default Orders;
+export default ViewOrder;

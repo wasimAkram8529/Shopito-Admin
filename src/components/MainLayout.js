@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import "./MainLayout.css";
 import { UploadOutlined } from "@ant-design/icons";
 import { BiCategoryAlt } from "react-icons/bi";
-import { FaClipboardList, FaBloggerB } from "react-icons/fa";
+import { SiGooglemarketingplatform } from "react-icons/si";
+import { FaProductHunt } from "react-icons/fa6";
+import { TbBrand4Chan } from "react-icons/tb";
+import { RiCouponLine } from "react-icons/ri";
+import { FaClipboardList, FaBloggerB, FaTimes } from "react-icons/fa";
+import { CiCircleList } from "react-icons/ci";
 import { IoIosNotifications } from "react-icons/io";
 import { ImBlog } from "react-icons/im";
 import {
   AiOutlineDashboard,
-  AiOutlineShoppingCart,
   AiOutlineUser,
   AiOutlineBgColors,
   AiOutlinePicRight,
@@ -21,21 +26,69 @@ import "react-toastify/dist/ReactToastify.css";
 const { Header, Sider, Content } = Layout;
 
 const MainLayout = () => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [screenWidth, setScreenWidth] = useState(window.innerWidth);
+  const [collapsed, setCollapsed] = useState(() => window.innerWidth < 800);
+
+  useEffect(() => {
+    // Update screenWidth when the window is resized
+    const handleResize = () => {
+      const newScreenWidth = window.innerWidth;
+      setScreenWidth(newScreenWidth);
+
+      // Dynamically update the collapsed state based on screen width
+      if (newScreenWidth < 800) {
+        setCollapsed(true);
+      } else {
+        setCollapsed(false);
+      }
+    };
+
+    // Add event listener for window resize
+    window.addEventListener("resize", handleResize);
+
+    // Remove event listener on component unmount
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  const hideMenu = () => {
+    setCollapsed(!collapsed);
+  };
+
   const {
     token: { colorBgContainer },
   } = theme.useToken();
   const navigate = useNavigate();
+
   return (
-    <Layout>
-      <Sider trigger={null} collapsible collapsed={collapsed}>
+    <Layout /*onContextMenu={(e) => e.preventDefault()}*/>
+      <Sider
+        className={!collapsed ? "side-menu-open" : "side-menu-collapsed"}
+        trigger={null}
+        collapsible
+        collapsed={collapsed}
+      >
         <div className="logo">
-          <h2 className="text-white fs-5 text-center py-3 mb-0">
-            <span className="sm-logo">ST</span>
-            <span className="lg-logo">Shopito</span>
+          <h2 className="text-white fs-5 py-3 mb-0">
+            <span className="sm-logo">
+              S<span>T</span>
+            </span>
+            <span className="lg-logo">
+              Shop<span>ito</span>
+            </span>
+            <FaTimes
+              className={
+                collapsed ? "hide-menu-button" : "hide-menu-button-active"
+              }
+              size={22}
+              color="#fff"
+              onClick={hideMenu}
+            />
           </h2>
         </div>
         <Menu
+          className="side-menu"
           theme="dark"
           mode="inline"
           defaultSelectedKeys={[""]}
@@ -47,7 +100,7 @@ const MainLayout = () => {
           }}
           items={[
             {
-              key: "dashboard",
+              key: "/admin",
               icon: <AiOutlineDashboard className="fs-4" />,
               label: "Dashboard",
             },
@@ -63,22 +116,22 @@ const MainLayout = () => {
               children: [
                 {
                   key: "add-product",
-                  icon: <AiOutlineShoppingCart className="fs-4" />,
+                  icon: <FaProductHunt className="fs-4" />,
                   label: "Add Product",
                 },
                 {
                   key: "product-list",
-                  icon: <AiOutlineShoppingCart className="fs-4" />,
+                  icon: <CiCircleList className="fs-4" />,
                   label: "Products List",
                 },
                 {
                   key: "brand",
-                  icon: <AiOutlineShoppingCart className="fs-4" />,
+                  icon: <TbBrand4Chan className="fs-4" />,
                   label: "Brand",
                 },
                 {
                   key: "brand-list",
-                  icon: <AiOutlineShoppingCart className="fs-4" />,
+                  icon: <CiCircleList className="fs-4" />,
                   label: "Brands List",
                 },
                 {
@@ -88,7 +141,7 @@ const MainLayout = () => {
                 },
                 {
                   key: "category-list",
-                  icon: <BiCategoryAlt className="fs-4" />,
+                  icon: <CiCircleList className="fs-4" />,
                   label: "Categories List",
                 },
                 {
@@ -98,7 +151,7 @@ const MainLayout = () => {
                 },
                 {
                   key: "Color-list",
-                  icon: <AiOutlineBgColors className="fs-4" />,
+                  icon: <CiCircleList className="fs-4" />,
                   label: "Colors List",
                 },
               ],
@@ -107,6 +160,23 @@ const MainLayout = () => {
               key: "orders",
               icon: <FaClipboardList className="fs-4" />,
               label: "Orders",
+            },
+            {
+              key: "marketing",
+              icon: <SiGooglemarketingplatform className="fs-4" />,
+              label: "Marketing",
+              children: [
+                {
+                  key: "coupon",
+                  icon: <RiCouponLine className="fs-4" />,
+                  label: "Add coupon",
+                },
+                {
+                  key: "coupon-list",
+                  icon: <CiCircleList className="fs-4" />,
+                  label: "Coupon List",
+                },
+              ],
             },
             {
               key: "blogs",
@@ -120,7 +190,7 @@ const MainLayout = () => {
                 },
                 {
                   key: "blog-list",
-                  icon: <FaBloggerB className="fs-4" />,
+                  icon: <CiCircleList className="fs-4" />,
                   label: "Blog List",
                 },
                 {
@@ -130,14 +200,14 @@ const MainLayout = () => {
                 },
                 {
                   key: "blog-category-list",
-                  icon: <FaBloggerB className="fs-4" />,
+                  icon: <CiCircleList className="fs-4" />,
                   label: "Blog Category List",
                 },
               ],
             },
             {
               key: "enquiries",
-              icon: <AiOutlineShoppingCart className="fs-4" />,
+              icon: <CiCircleList className="fs-4" />,
               label: "Enquiry",
             },
           ]}
@@ -158,6 +228,12 @@ const MainLayout = () => {
               height: 64,
             }}
           />
+          <div
+            className={
+              collapsed ? `nav-wrapper show-nav-wrapper` : `nav-wrapper`
+            }
+            onClick={hideMenu}
+          ></div>
           <div className="d-flex gap-3 align-items-center">
             <div className="position-relative">
               <IoIosNotifications className="fs-4" />
@@ -209,7 +285,7 @@ const MainLayout = () => {
             margin: "24px 16px",
             padding: 24,
             minHeight: 280,
-            background: colorBgContainer,
+            background: "red",
           }}
         >
           <ToastContainer
@@ -231,5 +307,3 @@ const MainLayout = () => {
 };
 
 export default MainLayout;
-
-/* */

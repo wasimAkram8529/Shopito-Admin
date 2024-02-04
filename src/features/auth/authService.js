@@ -18,9 +18,16 @@ const getLoginStatus = async () => {
   const response = await axios.get(API_URL + "getLoginStatus");
   return response.data;
 };
+
+// Get A Product
+const getAOrder = async (id) => {
+  const response = await axios.get(API_URL + `order/${id}`);
+  return response.data;
+};
 const authService = {
   login,
   getLoginStatus,
+  getAOrder,
 };
 
 export default authService;

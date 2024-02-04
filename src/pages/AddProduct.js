@@ -1,23 +1,31 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 //import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import CustomInput from "../components/CustomInput";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
-import { getbrands } from "../features/brand/brandSlice";
-import { getProductsCategory } from "../features/pCategory/pCategorySlice";
-import { getColor } from "../features/color/colorSlice";
+import { RESET_BRAND, getbrands } from "../features/brand/brandSlice";
+import {
+  RESET_PCATEGORY,
+  getProductsCategory,
+} from "../features/pCategory/pCategorySlice";
+import { RESET_COLOR, getColor } from "../features/color/colorSlice";
 import "react-widgets/styles.css";
 import { Select } from "antd";
 import Dropzone from "react-dropzone";
 import {
   uploadProductImg,
   deleteProductImg,
+  RESET_IMGURL,
 } from "../features/upload/uploadSlice";
-import { RESET_AUTH, createProduct } from "../features/product/productSlice";
-import { toast } from "react-toastify";
+import {
+  RESET_PRODUCT,
+  createProduct,
+  getAProduct,
+  updateProduct,
+} from "../features/product/productSlice";
 
 // Validation of New Product
 let productSchema = Yup.object().shape({
@@ -37,7 +45,37 @@ const AddProduct = () => {
   const dispatch = useDispatch();
   const [color, setColor] = useState();
   const navigate = useNavigate();
+  const location = useLocation();
+  const [imageURL, setImageURL] = useState([]);
+  const getProductId = location.pathname.split("/")[3];
   //const [imageList, setImageList] = useState();
+
+  useEffect(() => {
+    if (getProductId !== undefined) {
+      dispatch(getAProduct(getProductId))
+        .then((data) => {
+          setImageURL(data.payload.image);
+          console.log(data.payload);
+          formik.setValues({
+            title: data.payload.title,
+            description: data.payload.title,
+            price: data.payload.price,
+            category: data.payload.category,
+            tags: data.payload.tags,
+            brand: data.payload.brand,
+            quantity: data.payload.quantity,
+            color: data.payload.color[0],
+            image: data.payload.image[0],
+          });
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      dispatch(RESET_PRODUCT());
+    }
+    formik.resetForm();
+  }, [getProductId]);
 
   const formik = useFormik({
     initialValues: {
@@ -53,10 +91,15 @@ const AddProduct = () => {
     },
     validationSchema: productSchema,
     onSubmit: (values) => {
-      dispatch(createProduct(values));
+      if (getProductId !== undefined) {
+        const data = { data: values, id: getProductId };
+        dispatch(updateProduct(data));
+      } else {
+        dispatch(createProduct(values));
+      }
       formik.resetForm();
       setColor(null);
-      dispatch(RESET_AUTH());
+      dispatch(RESET_PRODUCT());
       setTimeout(() => {
         navigate("/admin/product-list");
       }, 3000);
@@ -67,6 +110,13 @@ const AddProduct = () => {
     dispatch(getbrands());
     dispatch(getProductsCategory());
     dispatch(getColor());
+    setImageURL([]);
+    return () => {
+      RESET_BRAND();
+      RESET_PCATEGORY();
+      RESET_COLOR();
+      RESET_IMGURL();
+    };
   }, [dispatch]);
 
   // Get States
@@ -74,27 +124,13 @@ const AddProduct = () => {
   const { pCategory } = useSelector((state) => state.pCategory);
   const { colors } = useSelector((state) => state.color);
   const { images } = useSelector((state) => state.upload);
-  const productCreated = useSelector((state) => state.product);
-
-  useEffect(() => {
-    if (productCreated.isSuccess && productCreated.products) {
-      toast.success("Product Added Successfully");
-    }
-
-    if (productCreated.isError) {
-      toast.error("Something went wrong");
-    }
-  }, [
-    productCreated.isLoading,
-    productCreated.isSuccess,
-    productCreated.isError,
-    productCreated.products,
-  ]);
 
   // Lists
   let brandList = [];
   let pCategoryList = [];
   let colorList = [];
+
+  // console.log(images);
 
   if (!isLoading) {
     brandList = brands.map((item, j) => {
@@ -116,10 +152,22 @@ const AddProduct = () => {
     });
   }
   formik.values.color = color ? color : "";
-  formik.values.image = images;
+  // formik.values.image = images.length !== 0 ? images : imageURL;
+  const buttonText =
+    getProductId !== undefined ? "Update Product" : "Add Product";
+
+  async function dispatchOnDelete(id) {
+    await dispatch(deleteProductImg(id));
+
+    setImageURL([]);
+  }
+  async function dispatchOnUpload(acceptedFiles) {
+    await dispatch(uploadProductImg(acceptedFiles));
+    setImageURL([]);
+  }
   return (
     <div>
-      <h3 className="mb-4 title">Add Product</h3>
+      <h3 className="mb-4 title">{getProductId ? "Update" : "Add"} Product</h3>
       <div>
         <form action="" onSubmit={formik.handleSubmit}>
           <CustomInput
@@ -237,9 +285,8 @@ const AddProduct = () => {
           </div>
           <div className="bg-white text-center border-1 p-5 mt-3">
             <Dropzone
-              onDrop={(acceptedFiles) =>
-                dispatch(uploadProductImg(acceptedFiles))
-              }
+              onDrop={(acceptedFiles) => dispatchOnUpload(acceptedFiles)}
+              multiple={true}
             >
               {({ getRootProps, getInputProps }) => (
                 <section>
@@ -259,30 +306,49 @@ const AddProduct = () => {
             ) : null}
           </div>
           <div className="showimages d-flex flex-wrap gap-3">
-            {images.map((image, j) => {
-              return (
-                <div key={j + 1} className="position-relative">
-                  <button
-                    type="button"
-                    onClick={() => dispatch(deleteProductImg(image.public_id))}
-                    className="btn-close position-absolute"
-                    style={{ top: "10px", right: "10px" }}
-                  ></button>
-                  <img
-                    src={image.url}
-                    alt="ProductImage"
-                    width={200}
-                    height={200}
-                  />
-                </div>
-              );
-            })}
+            {/* {images.length !== 0
+              ? images.map((image, j) => {
+                  return (
+                    <div key={j + 1} className="position-relative">
+                      <button
+                        type="button"
+                        onClick={() => dispatchOnDelete(image.public_id)}
+                        className="btn-close position-absolute"
+                        style={{ top: "10px", right: "10px" }}
+                      ></button>
+                      <img
+                        src={image.url}
+                        alt="ProductImage"
+                        width={200}
+                        height={200}
+                      />
+                    </div>
+                  );
+                })
+              : imageURL.map((image, j) => {
+                  return (
+                    <div key={j + 1} className="position-relative">
+                      <button
+                        type="button"
+                        onClick={() => dispatchOnDelete(image.public_id)}
+                        className="btn-close position-absolute"
+                        style={{ top: "10px", right: "10px" }}
+                      ></button>
+                      <img
+                        src={image.url}
+                        alt="ProductImage"
+                        width={200}
+                        height={200}
+                      />
+                    </div>
+                  );
+                })} */}
           </div>
           <button
             className="btn btn-success border-0 rounded-3 my-5"
             type="submit"
           >
-            Add Product
+            {buttonText}
           </button>
         </form>
       </div>

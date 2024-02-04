@@ -3,8 +3,10 @@ import { Table } from "antd";
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { useDispatch, useSelector } from "react-redux";
-import { getProducts } from "../features/product/productSlice";
+import { deleteProduct, getProducts } from "../features/product/productSlice";
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import CustomModel from "../components/CustomModel";
 const columns = [
   {
     title: "SNo",
@@ -43,11 +45,23 @@ const columns = [
 
 const ProductList = () => {
   const dispatch = useDispatch();
+
+  const [open, setOpen] = useState(false);
+  const [productId, setProductId] = useState("");
+
+  const hideModal = () => {
+    setOpen(false);
+  };
+  const showModal = (id) => {
+    setOpen(true);
+    setProductId(id);
+  };
   useEffect(() => {
     dispatch(getProducts());
-  }, [dispatch]);
+  }, []);
 
   const { products, isLoading } = useSelector((state) => state.product);
+
   const data1 = [];
   if (!isLoading) {
     for (let i = 0; i < products.length; i++) {
@@ -58,25 +72,41 @@ const ProductList = () => {
         category: products[i].category,
         brand: products[i].brand,
         action: (
-          <>
-            <Link className="fs-2" to="/">
+          <div className="action-menu">
+            <Link className="fs-2" to={`/admin/product/${products[i]._id}`}>
               <BiEdit />
             </Link>
-            <Link className="ms-3 fs-2 text-danger" to="/">
+            <button
+              className="ms-3 fs-2 text-danger bg-transparent border-0"
+              onClick={() => showModal(products[i]._id)}
+            >
               <AiFillDelete />
-            </Link>
-          </>
+            </button>
+          </div>
         ),
         quantity: products[i].quantity >= 0 ? products[i].quantity : 0,
       });
     }
   }
+
+  const deleteProductHandler = async (id) => {
+    await dispatch(deleteProduct(id));
+    hideModal();
+    // Refetch the brand list after deletion
+    dispatch(getProducts());
+  };
   return (
     <div>
       <h3 className="mb-4 title">Products</h3>
       <div>
         <Table columns={columns} dataSource={data1} />
       </div>
+      <CustomModel
+        open={open}
+        hideModal={hideModal}
+        performAction={() => deleteProductHandler(productId)}
+        title="Are you sure want to delete this product"
+      />
     </div>
   );
 };

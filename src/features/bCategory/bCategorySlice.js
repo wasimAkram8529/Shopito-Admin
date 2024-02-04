@@ -1,20 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import productService from "./productService";
+import bCategoryService from "./bCategoryService";
 import { toast } from "react-toastify";
 
 const initialState = {
-  products: [],
+  bCategory: [],
   isError: false,
   isLoading: false,
   isSuccess: false,
   message: "",
 };
 
-export const getProducts = createAsyncThunk(
-  "products/get-products",
+export const getBlogCategory = createAsyncThunk(
+  "bCategory/get-blogCategory",
   async (thunkAPI) => {
     try {
-      return await productService.getProducts();
+      return await bCategoryService.getBlogCategory();
     } catch (error) {
       const message =
         (error.response &&
@@ -26,12 +26,11 @@ export const getProducts = createAsyncThunk(
     }
   }
 );
-
-export const getAProduct = createAsyncThunk(
-  "products/get-A-product",
+export const getABlogCategory = createAsyncThunk(
+  "bCategory/get-A-blogCategory",
   async (id, thunkAPI) => {
     try {
-      return await productService.getAProduct(id);
+      return await bCategoryService.getABlogCategory(id);
     } catch (error) {
       const message =
         (error.response &&
@@ -43,13 +42,12 @@ export const getAProduct = createAsyncThunk(
     }
   }
 );
-
-export const updateProduct = createAsyncThunk(
-  "products/update-product",
+export const updateBlogCategory = createAsyncThunk(
+  "bCategory/update-blogCategory",
   async (payload, thunkAPI) => {
     try {
       const { id, data } = payload;
-      return await productService.updateProduct(id, data);
+      return await bCategoryService.updateBlogCategory(id, data);
     } catch (error) {
       const message =
         (error.response &&
@@ -61,29 +59,27 @@ export const updateProduct = createAsyncThunk(
     }
   }
 );
-export const createProduct = createAsyncThunk(
-  "products/create-product",
-  async (data, thunkAPI) => {
-    try {
-      return await productService.createProduct(data);
-    } catch (error) {
-      const message =
-        (error.response &&
-          error.response.data &&
-          error.response.data.message) ||
-        error.message ||
-        error.toString();
-      return thunkAPI.rejectWithValue(message);
-    }
-  }
-);
-
-// Delete A Product
-export const deleteProduct = createAsyncThunk(
-  "products/delete-product",
+export const deleteBlogCategory = createAsyncThunk(
+  "bCategory/delete-blogCategory",
   async (id, thunkAPI) => {
     try {
-      return await productService.deleteProduct(id);
+      return await bCategoryService.deleteBlogCategory(id);
+    } catch (error) {
+      const message =
+        (error.response &&
+          error.response.data &&
+          error.response.data.message) ||
+        error.message ||
+        error.toString();
+      return thunkAPI.rejectWithValue(message);
+    }
+  }
+);
+export const createBlogCategory = createAsyncThunk(
+  "bCategory/create-blogs",
+  async (data, thunkAPI) => {
+    try {
+      return await bCategoryService.createBlogCategory(data);
     } catch (error) {
       const message =
         (error.response &&
@@ -96,12 +92,12 @@ export const deleteProduct = createAsyncThunk(
   }
 );
 
-export const productSlice = createSlice({
-  name: "products",
+export const bCategorySlice = createSlice({
+  name: "blogCategory",
   initialState,
   reducers: {
-    RESET_PRODUCT(state) {
-      state.products = [];
+    RESET_BLOG_CATEGORY(state) {
+      state.bCategory = [];
       state.isError = false;
       state.isSuccess = false;
       state.isLoading = false;
@@ -109,98 +105,96 @@ export const productSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    // Get Products
+    // Get Blog Category
     builder
-      .addCase(getProducts.pending, (state) => {
+      .addCase(getBlogCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getProducts.fulfilled, (state, action) => {
+      .addCase(getBlogCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = action.payload;
-        //console.log(state.customers);
+        state.bCategory = action.payload;
       })
-      .addCase(getProducts.rejected, (state, action) => {
+      .addCase(getBlogCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        state.products = [];
-      }) // Create Product
-      .addCase(getAProduct.pending, (state) => {
+        state.bCategory = [];
+      }) // Create Blog Category
+      .addCase(createBlogCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(getAProduct.fulfilled, (state, action) => {
+      .addCase(createBlogCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = action.payload;
-        //console.log(state.customers);
+        state.bCategory = action.payload;
+        toast.success("Blog Category Added Successfully");
       })
-      .addCase(getAProduct.rejected, (state, action) => {
+      .addCase(createBlogCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        state.products = [];
-      }) // Create Product
-      .addCase(createProduct.pending, (state) => {
-        state.isLoading = true;
-      })
-      .addCase(createProduct.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.isError = false;
-        state.isSuccess = true;
-        state.products = action.payload;
-        toast.success("Product Added Successfully");
-      })
-      .addCase(createProduct.rejected, (state, action) => {
-        state.isLoading = false;
-        state.isError = true;
-        state.isSuccess = false;
-        state.message = action.error;
-        state.products = [];
+        state.bCategory = [];
         toast.error("Something went wrong");
-      })
-      .addCase(updateProduct.pending, (state) => {
+      }) // Get A Blog Category
+      .addCase(getABlogCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(updateProduct.fulfilled, (state, action) => {
+      .addCase(getABlogCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = [];
-        toast.success("Product Update Successfully");
+        state.bCategory = action.payload;
       })
-      .addCase(updateProduct.rejected, (state, action) => {
+      .addCase(getABlogCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        state.products = [];
+        state.bCategory = [];
+      }) // Update Blog Category
+      .addCase(updateBlogCategory.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(updateBlogCategory.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = true;
+        state.bCategory = action.payload;
+        toast.success("Blog Category Updated Successfully");
+      })
+      .addCase(updateBlogCategory.rejected, (state, action) => {
+        state.isLoading = false;
+        state.isError = true;
+        state.isSuccess = false;
+        state.message = action.error;
+        state.bCategory = [];
         toast.error("Something went wrong");
-      })
-      .addCase(deleteProduct.pending, (state) => {
+      }) // Delete Blog Category
+      .addCase(deleteBlogCategory.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(deleteProduct.fulfilled, (state, action) => {
+      .addCase(deleteBlogCategory.fulfilled, (state, action) => {
         state.isLoading = false;
         state.isError = false;
         state.isSuccess = true;
-        state.products = [];
-        toast.success("Product Delete Successfully");
+        state.bCategory = action.payload;
+        toast.success("Blog Category Deleted Successfully");
       })
-      .addCase(deleteProduct.rejected, (state, action) => {
+      .addCase(deleteBlogCategory.rejected, (state, action) => {
         state.isLoading = false;
         state.isError = true;
         state.isSuccess = false;
         state.message = action.error;
-        state.products = [];
+        state.bCategory = [];
         toast.error("Something went wrong");
       });
   },
 });
 
-export const { RESET_PRODUCT } = productSlice.actions;
-export default productSlice.reducer;
+export const { RESET_BLOG_CATEGORY } = bCategorySlice.actions;
+export default bCategorySlice.reducer;

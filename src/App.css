@@ -27,13 +27,3 @@
   font-size: 28px;
   font-family: Roboto !important;
 }
-.sub-title {
-  font-size: 24px;
-  font-family: Roboto !important;
-  color: var(--color-212529);
-}
-.desc {
-  font-size: 14px;
-  font-family: Roboto !important;
-  color: var(--color-828599);
-}
