@@ -5,6 +5,7 @@ import { deleteEnquiry, getEnquiries } from "../features/enquiry/enquirySlice";
 import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import CustomModel from "../components/CustomModel";
+import Loader from "../components/loader/Loader";
 const columns = [
   {
     title: "SNo",
@@ -89,18 +90,21 @@ const Enquiries = () => {
     dispatch(getEnquiries());
   };
   return (
-    <div>
-      <h3 className="mb-4 title">Enquiries</h3>
+    <>
+      {isLoading && <Loader />}
       <div>
-        <Table columns={columns} dataSource={data1} />
+        <h3 className="mb-4 title">Enquiries</h3>
+        <div>
+          <Table columns={columns} dataSource={data1} />
+        </div>
+        <CustomModel
+          open={open}
+          hideModal={hideModal}
+          performAction={() => deleteEnquiryHandler(enquiryId)}
+          title="Are you sure want to delete this Enquiry"
+        />
       </div>
-      <CustomModel
-        open={open}
-        hideModal={hideModal}
-        performAction={() => deleteEnquiryHandler(enquiryId)}
-        title="Are you sure want to delete this Enquiry"
-      />
-    </div>
+    </>
   );
 };
 

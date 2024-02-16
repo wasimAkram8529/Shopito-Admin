@@ -9,6 +9,7 @@ import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import CustomModel from "../components/CustomModel";
+import Loader from "../components/loader/Loader";
 
 const columns = [
   {
@@ -74,18 +75,21 @@ const CategoryList = () => {
   };
 
   return (
-    <div>
-      <h3 className="mb-4 title">Product Categories</h3>
+    <>
+      {isLoading && <Loader />}
       <div>
-        <Table columns={columns} dataSource={data1} />
+        <h3 className="mb-4 title">Product Categories</h3>
+        <div>
+          <Table columns={columns} dataSource={data1} />
+        </div>
+        <CustomModel
+          open={open}
+          hideModal={hideModal}
+          performAction={() => deleteProductCategoryHandler(productId)}
+          title="Are you sure want to delete this Product Category"
+        />
       </div>
-      <CustomModel
-        open={open}
-        hideModal={hideModal}
-        performAction={() => deleteProductCategoryHandler(productId)}
-        title="Are you sure want to delete this Product Category"
-      />
-    </div>
+    </>
   );
 };
 

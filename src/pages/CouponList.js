@@ -7,6 +7,7 @@ import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import CustomModel from "../components/CustomModel";
 import { formatDate } from "../utils/importantFunctions";
+import Loader from "../components/loader/Loader";
 const columns = [
   {
     title: "SNo",
@@ -52,20 +53,20 @@ const CouponList = () => {
   const data1 = [];
 
   if (!isLoading) {
-    for (let i = 0; i < coupons.length; i++) {
+    for (let i = 0; i < coupons?.length; i++) {
       data1.push({
         key: i,
-        coupon: coupons[i].name,
-        expiryDate: formatDate(coupons[i].expiry),
-        discount: `${coupons[i].discount + `%`}`,
+        coupon: coupons?.[i]?.name,
+        expiryDate: formatDate(coupons?.[i]?.expiry),
+        discount: `${coupons?.[i]?.discount + `%`}`,
         action: (
           <div className="action-menu">
-            <Link className="fs-2" to={`/admin/coupon/${coupons[i]._id}`}>
+            <Link className="fs-2" to={`/admin/coupon/${coupons?.[i]?._id}`}>
               <BiEdit />
             </Link>
             <button
               className="ms-3 fs-2 text-danger bg-transparent border-0"
-              onClick={() => showModal(coupons[i]._id)}
+              onClick={() => showModal(coupons?.[i]?._id)}
             >
               <AiFillDelete />
             </button>
@@ -83,18 +84,21 @@ const CouponList = () => {
   };
 
   return (
-    <div>
-      <h3 className="mb-4 title">coupon List</h3>
+    <>
+      {isLoading && <Loader />}
       <div>
-        <Table columns={columns} dataSource={data1} />
+        <h3 className="mb-4 title">coupon List</h3>
+        <div>
+          <Table columns={columns} dataSource={data1} />
+        </div>
+        <CustomModel
+          open={open}
+          hideModal={hideModal}
+          performAction={() => deleteCouponHandler(couponId)}
+          title="Are you sure want to delete this Coupon"
+        />
       </div>
-      <CustomModel
-        open={open}
-        hideModal={hideModal}
-        performAction={() => deleteCouponHandler(couponId)}
-        title="Are you sure want to delete this Coupon"
-      />
-    </div>
+    </>
   );
 };
 

@@ -6,6 +6,8 @@
   --color-828599: #828599;
   --color-ed464d: #ed464d;
   --color-ced4da: #ced4da;
+  --color-232f3e: #232f3e;
+  --color-febd69: #febd69;
 }
 
 .green {
@@ -26,4 +28,17 @@
 .title {
   font-size: 28px;
   font-family: Roboto !important;
+}
+
+.button {
+  background-color: var(--color-232f3e);
+  color: white;
+  font-size: 14px;
+  padding: 13px 33px 13px 33px;
+  border-radius: 25px;
+}
+
+.button:hover {
+  background-color: var(--color-febd69);
+  color: #131921;
 }

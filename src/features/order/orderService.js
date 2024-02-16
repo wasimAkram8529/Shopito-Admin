@@ -7,8 +7,16 @@ const getOrders = async () => {
   return response.data;
 };
 
+const updateOrderStatus = async (id, status) => {
+  const response = await axios.patch(API_URL + `/order/update-order/${id}`, {
+    status,
+  });
+  return response.data;
+};
+
 const orderService = {
   getOrders,
+  updateOrderStatus,
 };
 
 export default orderService;

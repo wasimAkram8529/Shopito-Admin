@@ -6,6 +6,7 @@ import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import CustomModel from "../components/CustomModel";
+import Loader from "../components/loader/Loader";
 const columns = [
   {
     title: "SNo",
@@ -81,18 +82,21 @@ const BlogList = () => {
     dispatch(getBlogs());
   };
   return (
-    <div>
-      <h3 className="mb-4 title">Blog List</h3>
+    <>
+      {isLoading && <Loader />}
       <div>
-        <Table columns={columns} dataSource={data1} />
+        <h3 className="mb-4 title">Blog List</h3>
+        <div>
+          <Table columns={columns} dataSource={data1} />
+        </div>
+        <CustomModel
+          open={open}
+          hideModal={hideModal}
+          performAction={() => deleteBLogHandler(BlogId)}
+          title="Are you sure want to delete this Blog"
+        />
       </div>
-      <CustomModel
-        open={open}
-        hideModal={hideModal}
-        performAction={() => deleteBLogHandler(BlogId)}
-        title="Are you sure want to delete this Blog"
-      />
-    </div>
+    </>
   );
 };
 

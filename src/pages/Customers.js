@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers } from "../features/customers/customerSlice";
+import Loader from "../components/loader/Loader";
 const columns = [
   {
     title: "SNo",
@@ -43,12 +44,15 @@ const Customers = () => {
     }
   }
   return (
-    <div>
-      <h3 className="mb-4 title">Customers</h3>
+    <>
+      {isLoading && <Loader />}
       <div>
-        <Table columns={columns} dataSource={data1} />
+        <h3 className="mb-4 title">Customers</h3>
+        <div>
+          <Table columns={columns} dataSource={data1} />
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

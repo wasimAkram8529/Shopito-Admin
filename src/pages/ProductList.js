@@ -7,6 +7,7 @@ import { deleteProduct, getProducts } from "../features/product/productSlice";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import CustomModel from "../components/CustomModel";
+import Loader from "../components/loader/Loader";
 const columns = [
   {
     title: "SNo",
@@ -68,7 +69,7 @@ const ProductList = () => {
       data1.push({
         key: i,
         title: products[i].title,
-        price: products[i].price,
+        price: `₹${products[i].price}`,
         category: products[i].category,
         brand: products[i].brand,
         action: (
@@ -96,18 +97,21 @@ const ProductList = () => {
     dispatch(getProducts());
   };
   return (
-    <div>
-      <h3 className="mb-4 title">Products</h3>
+    <>
+      {isLoading && <Loader />}
       <div>
-        <Table columns={columns} dataSource={data1} />
+        <h3 className="mb-4 title">Products</h3>
+        <div>
+          <Table columns={columns} dataSource={data1} />
+        </div>
+        <CustomModel
+          open={open}
+          hideModal={hideModal}
+          performAction={() => deleteProductHandler(productId)}
+          title="Are you sure want to delete this product"
+        />
       </div>
-      <CustomModel
-        open={open}
-        hideModal={hideModal}
-        performAction={() => deleteProductHandler(productId)}
-        title="Are you sure want to delete this product"
-      />
-    </div>
+    </>
   );
 };
 

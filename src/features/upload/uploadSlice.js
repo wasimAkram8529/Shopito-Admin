@@ -79,7 +79,6 @@ export const uploadSlice = createSlice({
         state.isSuccess = false;
         state.message = action.error;
         state.images = [];
-        console.log(action.payload);
         toast.error("Something went wrong");
       }) // Delete Product Image
       .addCase(deleteProductImg.pending, (state) => {
@@ -94,7 +93,6 @@ export const uploadSlice = createSlice({
         );
         console.log(state.images);
         toast.success(action.payload.message);
-        console.log(action.payload);
       })
       .addCase(deleteProductImg.rejected, (state, action) => {
         state.isLoadingImg = false;
