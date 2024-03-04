@@ -1,11 +1,5 @@
 import axios from "axios";
-// import { base_url } from "../../utils/base_url";
-
-<<<<<<< HEAD
-const BACKEND_URL = `http://localhost:5000` || process.env.BACKEND_URL;
-=======
 const BACKEND_URL = `http://localhost:5000`;
->>>>>>> 0452b9daa2ed98ab72b3e87807275b1497638cdb
 export const API_URL = `${BACKEND_URL}/api/user/`;
 
 const login = async (userData) => {
