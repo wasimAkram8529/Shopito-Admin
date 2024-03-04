@@ -70,7 +70,7 @@ export const uploadSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.images = action.payload;
-        console.log(action.payload);
+        //console.log(action.payload);
         toast.success("Image Upload Successfully");
       })
       .addCase(uploadProductImg.rejected, (state, action) => {

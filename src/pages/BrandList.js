@@ -43,21 +43,21 @@ const BrandList = () => {
   const data1 = [];
 
   if (!isLoading) {
-    for (let i = 0; i < brands.length; i++) {
+    for (let i = 0; i < brands?.length; i++) {
       data1.push({
         key: i,
-        brand: brands[i].title,
+        brand: brands?.[i]?.title,
         action: (
           <div className="action-menu">
             <Link
               className="fs-2"
-              to={`/admin/brand/update-brand/${brands[i]._id}`}
+              to={`/admin/brand/update-brand/${brands?.[i]?._id}`}
             >
               <BiEdit />
             </Link>
             <button
               className="ms-3 fs-2 text-danger bg-transparent border-0"
-              onClick={() => showModal(brands[i]._id)}
+              onClick={() => showModal(brands?.[i]?._id)}
             >
               <AiFillDelete />
             </button>

@@ -53,20 +53,20 @@ const BlogList = () => {
   const data1 = [];
 
   if (!isLoading) {
-    for (let i = 0; i < blogs.length; i++) {
+    for (let i = 0; i < blogs?.length; i++) {
       data1.push({
         key: i,
-        title: blogs[i].title,
-        category: blogs[i].category,
-        auther: blogs[i].auther,
+        title: blogs?.[i]?.title,
+        category: blogs?.[i]?.category,
+        auther: blogs?.[i]?.auther,
         action: (
           <div className="action-menu">
-            <Link className="fs-2" to={`/admin/blog/${blogs[i]._id}`}>
+            <Link className="fs-2" to={`/admin/blog/${blogs?.[i]?._id}`}>
               <BiEdit />
             </Link>
             <button
               className="ms-3 fs-2 text-danger bg-transparent border-0"
-              onClick={() => showModal(blogs[i]._id)}
+              onClick={() => showModal(blogs?.[i]?._id)}
             >
               <AiFillDelete />
             </button>

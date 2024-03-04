@@ -120,6 +120,7 @@ export const productSlice = createSlice({
         state.isSuccess = true;
         state.products = action.payload;
         //console.log(state.customers);
+        //console.log(action.payload);
       })
       .addCase(getProducts.rejected, (state, action) => {
         state.isLoading = false;
@@ -153,6 +154,7 @@ export const productSlice = createSlice({
         state.isError = false;
         state.isSuccess = true;
         state.products = action.payload;
+        //console.log(action.payload);
         toast.success("Product Added Successfully");
       })
       .addCase(createProduct.rejected, (state, action) => {

@@ -33,12 +33,12 @@ const AddBlog = () => {
     if (getBlogId !== undefined) {
       dispatch(getABlog(getBlogId))
         .then((data) => {
-          setImageURL(data.payload.image);
+          setImageURL(data?.payload?.image);
           formik.setValues({
-            title: data.payload.title,
-            description: data.payload.description,
-            category: data.payload.category,
-            image: data.payload.image[0],
+            title: data?.payload?.title,
+            description: data?.payload?.description,
+            category: data?.payload?.category,
+            image: data?.payload?.image[0],
           });
         })
         .catch((error) => {
@@ -83,15 +83,15 @@ const AddBlog = () => {
 
   let bCategoryList = [];
   if (!isLoading) {
-    bCategoryList = bCategory.map((item, j) => {
+    bCategoryList = bCategory?.map((item, j) => {
       return (
-        <option key={j + 1} value={item.title}>
-          {item.title}
+        <option key={j + 1} value={item?.title}>
+          {item?.title}
         </option>
       );
     });
   }
-  formik.values.image = images.length !== 0 ? images : imageURL;
+  formik.values.image = images?.length !== 0 ? images : imageURL;
   const buttonText = getBlogId !== undefined ? "Update Blog" : "Add Blog";
 
   async function dispatchOnDelete(id) {
@@ -176,18 +176,18 @@ const AddBlog = () => {
             ) : null}
           </div>
           <div className="showimages d-flex flex-wrap gap-3">
-            {images.length !== 0
-              ? images.map((image, j) => {
+            {images?.length !== 0
+              ? images?.map((image, j) => {
                   return (
                     <div key={j + 1} className="position-relative">
                       <button
                         type="button"
-                        onClick={() => dispatchOnDelete(image.public_id)}
+                        onClick={() => dispatchOnDelete(image?.public_id)}
                         className="btn-close position-absolute"
                         style={{ top: "10px", right: "10px" }}
                       ></button>
                       <img
-                        src={image.url}
+                        src={image?.url}
                         alt="ProductImage"
                         width={200}
                         height={200}
@@ -195,17 +195,17 @@ const AddBlog = () => {
                     </div>
                   );
                 })
-              : imageURL.map((image, j) => {
+              : imageURL?.map((image, j) => {
                   return (
                     <div key={j + 1} className="position-relative">
                       <button
                         type="button"
-                        onClick={() => dispatchOnDelete(image.public_id)}
+                        onClick={() => dispatchOnDelete(image?.public_id)}
                         className="btn-close position-absolute"
                         style={{ top: "10px", right: "10px" }}
                       ></button>
                       <img
-                        src={image.url}
+                        src={image?.url}
                         alt="ProductImage"
                         width={200}
                         height={200}

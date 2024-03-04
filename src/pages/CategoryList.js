@@ -47,18 +47,21 @@ const CategoryList = () => {
   const data1 = [];
 
   if (!isLoading) {
-    for (let i = 0; i < pCategory.length; i++) {
+    for (let i = 0; i < pCategory?.length; i++) {
       data1.push({
         key: i,
-        pCategory: pCategory[i].title,
+        pCategory: pCategory?.[i]?.title,
         action: (
           <div className="action-menu">
-            <Link className="fs-2" to={`/admin/category/${pCategory[i]._id}`}>
+            <Link
+              className="fs-2"
+              to={`/admin/category/${pCategory?.[i]?._id}`}
+            >
               <BiEdit />
             </Link>
             <button
               className="ms-3 fs-2 text-danger bg-transparent border-0"
-              onClick={() => showModal(pCategory[i]._id)}
+              onClick={() => showModal(pCategory?.[i]?._id)}
             >
               <AiFillDelete />
             </button>

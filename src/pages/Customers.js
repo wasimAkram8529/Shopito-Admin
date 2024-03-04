@@ -32,14 +32,14 @@ const Customers = () => {
   const { customers, isLoading } = useSelector((state) => state.customer);
   const data1 = [];
   if (!isLoading) {
-    for (let i = 0; i < customers.length; i++) {
+    for (let i = 0; i < customers?.length; i++) {
       data1.push({
         key: i,
-        name: customers[i].firstName
-          ? customers[i].firstName + " " + customers[i].lastName
+        name: customers?.[i]?.firstName
+          ? customers?.[i]?.firstName + " " + customers?.[i]?.lastName
           : "Puneeth Sharma",
-        email: customers[i].email,
-        mobile: customers[i].mobile ? customers[i].mobile : "7979700554",
+        email: customers?.[i]?.email,
+        mobile: customers?.[i]?.mobile ? customers?.[i]?.mobile : "7979700554",
       });
     }
   }

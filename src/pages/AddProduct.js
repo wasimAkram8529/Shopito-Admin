@@ -144,22 +144,22 @@ const AddProduct = () => {
   // console.log(images);
 
   if (!isLoading) {
-    brandList = brands.map((item, j) => {
+    brandList = brands?.map((item, j) => {
       return (
-        <option key={j + 1} value={item.title}>
-          {item.title}
+        <option key={j + 1} value={item?.title}>
+          {item?.title}
         </option>
       );
     });
-    pCategoryList = pCategory.map((item, j) => {
+    pCategoryList = pCategory?.map((item, j) => {
       return (
-        <option key={j + 1} value={item.title}>
-          {item.title}
+        <option key={j + 1} value={item?.title}>
+          {item?.title}
         </option>
       );
     });
-    colorList = colors.map((item) => {
-      return { label: item.title, value: item._id };
+    colorList = colors?.map((item) => {
+      return { label: item?.title, value: item?._id };
     });
   }
   formik.values.color = color ? color : "";
@@ -266,6 +266,7 @@ const AddProduct = () => {
               <option value="featured">Featured</option>
               <option value="popular">Popular</option>
               <option value="special">Special</option>
+              <option value="slider">Slider</option>
             </select>
             <div className="error">
               {formik.touched.tags && formik.errors.tags ? (

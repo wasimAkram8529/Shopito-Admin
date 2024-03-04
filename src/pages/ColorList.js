@@ -43,18 +43,18 @@ const ColorList = () => {
   //console.log(colors);
   const data1 = [];
   if (!isLoading) {
-    for (let i = 0; i < colors.length; i++) {
+    for (let i = 0; i < colors?.length; i++) {
       data1.push({
         key: i,
-        color: colors[i].title,
+        color: colors?.[i]?.title,
         action: (
           <div className="action-menu">
-            <Link className="fs-2" to={`/admin/color/${colors[i]._id}`}>
+            <Link className="fs-2" to={`/admin/color/${colors?.[i]?._id}`}>
               <BiEdit />
             </Link>
             <button
               className="ms-3 fs-2 text-danger bg-transparent border-0"
-              onClick={() => showModal(colors[i]._id)}
+              onClick={() => showModal(colors?.[i]?._id)}
             >
               <AiFillDelete />
             </button>

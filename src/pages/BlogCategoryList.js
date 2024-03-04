@@ -45,21 +45,21 @@ const BlogCategoryList = () => {
 
   const data1 = [];
   if (!isLoading) {
-    for (let i = 0; i < bCategory.length; i++) {
+    for (let i = 0; i < bCategory?.length; i++) {
       data1.push({
         key: i,
-        blog: bCategory[i].title,
+        blog: bCategory?.[i]?.title,
         action: (
           <div className="action-menu">
             <Link
               className="fs-2"
-              to={`/admin/blog-category/${bCategory[i]._id}`}
+              to={`/admin/blog-category/${bCategory?.[i]?._id}`}
             >
               <BiEdit />
             </Link>
             <button
               className="ms-3 fs-2 text-danger bg-transparent border-0"
-              onClick={() => showModal(bCategory[i]._id)}
+              onClick={() => showModal(bCategory?.[i]?._id)}
             >
               <AiFillDelete />
             </button>
