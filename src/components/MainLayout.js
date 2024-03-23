@@ -106,7 +106,7 @@ const MainLayout = () => {
               if (key === "signOut") {
                 dispatch(logout())
                   .then((data) => {
-                    if (data.payload === "Successfullly Logged Out") {
+                    if (data.payload === "Successfully Logged Out") {
                       navigate("/");
                     }
                   })
