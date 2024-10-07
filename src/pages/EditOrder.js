@@ -6,6 +6,7 @@ import { Link, useLocation } from "react-router-dom";
 import { formatDate } from "../utils/importantFunctions";
 import { getAOrder } from "../features/auth/authSlice";
 import Loader from "../components/loader/Loader";
+import { updateOrderStatus } from "../features/order/orderSlice";
 const columns = [
   {
     title: "SNo",
@@ -27,10 +28,10 @@ const columns = [
     title: "Order Status",
     dataIndex: "orderStatus",
   },
-  {
-    title: "Action",
-    dataIndex: "action",
-  },
+  // {
+  //   title: "Action",
+  //   dataIndex: "action",
+  // },
 ];
 
 const ViewOrder = () => {
@@ -42,8 +43,21 @@ const ViewOrder = () => {
     dispatch(getAOrder(getOrderId));
   }, [getOrderId]);
 
+  const handleStatus = (e, id, defaultValue) => {
+    if (e.target.value !== defaultValue) {
+      const payload = {
+        id,
+        status: e.target.value,
+      };
+      // console.log("payload", payload);
+      dispatch(updateOrderStatus(payload));
+    }
+  };
+
+  // const { userOrders, isLoading } = useSelector((state) => state.auth);
   const { userOrders, isLoading } = useSelector((state) => state.auth);
-  //console.log(userOrders);
+  // console.log("order", userOrders);
+  // console.log(userOrders);
 
   let count = 0;
   let sNumber = function increment() {
@@ -57,15 +71,17 @@ const ViewOrder = () => {
         key: sNumber(),
         orderCategory: product?.product?.category,
         viewOrder: (
-          <Link className="" to={`/admin/order/${product?.product?._id}`}>
+          <Link className="" to={`/admin/view-order/${userOrders?.[0]?._id}`}>
             Click Here
           </Link>
         ),
-        totalAmount: product?.product?.price,
+        totalAmount: `₹${userOrders?.[0]?.totalPrice}`,
         orderStatus: (
           <select
             className="form-control form-select"
-            onClick={(e) => console.log(e.target.value)}
+            onClick={(e) => {
+              handleStatus(e, getOrderId, userOrders?.[0]?.orderStatus);
+            }}
           >
             <option defaultChecked>{userOrders?.[0]?.orderStatus}</option>
             <option value="Not Processed">Not Processed</option>
@@ -75,16 +91,16 @@ const ViewOrder = () => {
             <option value="Delivered">Delivered</option>
           </select>
         ),
-        action: (
-          <div className="action-menu">
-            {/* <Link className="ms-3 fs-2 text-danger" to="/">
-              <AiOutlineEye className="fs-5" />
-            </Link> */}
-            <Link className="ms-3 fs-2 text-danger" to="/">
-              <AiFillDelete className="fs-5" />
-            </Link>
-          </div>
-        ),
+        // action: (
+        //   <div className="action-menu">
+        //     {/* <Link className="ms-3 fs-2 text-danger" to="/">
+        //       <AiOutlineEye className="fs-5" />
+        //     </Link> */}
+        //     <Link className="ms-3 fs-2 text-danger" to="/">
+        //       <AiFillDelete className="fs-5" />
+        //     </Link>
+        //   </div>
+        // ),
       });
     }
   }

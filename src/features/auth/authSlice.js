@@ -323,8 +323,7 @@ export const authSlice = createSlice({
       .addCase(forgotPassword.fulfilled, (state) => {
         state.isLoading = false;
         state.isSuccess = true;
-        //console.log(action.payload);
-        toast.success("Password Reset Link is Sent to Your Mail Please Check");
+        state.message = "Password Reset Link is Sent to Your Mail Please Check";
       })
       .addCase(forgotPassword.rejected, (state, action) => {
         state.isLoading = false;

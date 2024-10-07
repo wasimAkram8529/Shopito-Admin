@@ -154,8 +154,8 @@ const Dashboard = () => {
       <div>
         <h3>Dashboard</h3>
         <div className="product-stats">
-          <div className="">
-            <div>
+          <div>
+            <div className="product-stats-card">
               <p className="desc">Total Yearly Income</p>
               <h4 className="sub-title">{`₹${yearlyData?.[0]?.amount}`}</h4>
             </div>
@@ -168,8 +168,8 @@ const Dashboard = () => {
               </p>
             </div>
           </div>
-          <div className="">
-            <div>
+          <div>
+            <div className="product-stats-card">
               <p className="desc">Total Yearly Sales</p>
               <h4 className="sub-title">{`${yearlyData?.[0]?.count}`}</h4>
             </div>

@@ -55,7 +55,7 @@ const getYearlyOrderCountAndAmount = async () => {
 // Forgot Password Token
 const forgotPasswordToken = async (userEmail) => {
   const response = await axios.patch(
-    API_URL + `forgot-password-token`,
+    API_URL + `admin-forgot-password-token`,
     userEmail
   );
   return response.data;

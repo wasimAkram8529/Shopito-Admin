@@ -6,14 +6,17 @@ import * as Yup from "yup";
 import { useDispatch, useSelector } from "react-redux";
 import { RESET_AUTH, login } from "../features/auth/authSlice";
 import Loader from "../components/loader/Loader";
+import loginImg from "../assets/login.png";
+
+let userSchema = Yup.object().shape({
+  email: Yup.string().email().required("Email is required"),
+  password: Yup.string().required("Password is required"),
+});
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  let userSchema = Yup.object().shape({
-    email: Yup.string().email().required(),
-    password: Yup.string().required(),
-  });
+
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -39,23 +42,24 @@ const Login = () => {
   return (
     <>
       {isLoading && <Loader />}
-      <div
-        className="py-5"
-        style={{ background: "#ffd333", minHeight: "100vh" }}
-      >
+      <div className="auth-container">
+        {/* <br />
         <br />
         <br />
-        <br />
-        <br />
-        <div className="my-5 w-25 bg-white rounded-3 mx-auto p-4 login-class">
-          <h3 className="text-center">Sign In</h3>
-          <p className="text-center">Login to your account to continue.</p>
+        <br /> */}
+        {/* <div className="my-5 w-25 bg-white rounded-3 mx-auto p-4 login-class">
+        </div> */}
+        <div className="auth-img">
+          <img src={loginImg} alt="Login image" />
+        </div>
+        <div className="auth-card">
+          <h3 className="text-center">Login</h3>
           <div className="error text-center">{message}</div>
           <form action="" onSubmit={formik.handleSubmit}>
             <CustomInput
               name="email"
               type="text"
-              placeholder="Email Address"
+              placeholder="Email address"
               id="email"
               onCh={formik.handleChange("email")}
               val={formik.values.email}
@@ -78,8 +82,8 @@ const Login = () => {
                 <div>{formik.errors.password}</div>
               ) : null}
             </div>
-            <div className="mb-3 text-end">
-              <Link to="/forgot-password">Forgot Password</Link>
+            <div className="my-3 text-end">
+              <Link to="/forgot-password">Forgot password?</Link>
             </div>
             <button
               className="border-0 px-3 py-2 text-white fw-bold w-100 text-center text-decoration-none fs-5"

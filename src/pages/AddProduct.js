@@ -105,6 +105,7 @@ const AddProduct = () => {
       if (getProductId !== undefined) {
         const data = { data: values, id: getProductId };
         dispatch(updateProduct(data));
+        // console.log(values);
       } else {
         dispatch(createProduct(values));
       }
@@ -334,13 +335,12 @@ const AddProduct = () => {
                           type="button"
                           onClick={() => dispatchOnDelete(image.public_id)}
                           className="btn-close position-absolute"
-                          style={{ top: "10px", right: "10px" }}
+                          style={{ top: "-6px", right: "-6px" }}
                         ></button>
                         <img
                           src={image.url}
                           alt="ProductImage"
-                          width={200}
-                          height={200}
+                          className="product-img"
                         />
                       </div>
                     );
@@ -352,13 +352,15 @@ const AddProduct = () => {
                           type="button"
                           onClick={() => dispatchOnDelete(image.public_id)}
                           className="btn-close position-absolute"
-                          style={{ top: "10px", right: "10px" }}
+                          style={{
+                            top: "-6px",
+                            right: "-6px",
+                          }}
                         ></button>
                         <img
                           src={image.url}
                           alt="ProductImage"
-                          width={200}
-                          height={200}
+                          className="product-img"
                         />
                       </div>
                     );

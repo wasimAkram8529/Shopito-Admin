@@ -27,7 +27,8 @@ import { getLoginStatus } from "./features/auth/authSlice";
 import AddCoupon from "./pages/AddCoupon";
 import CouponList from "./pages/CouponList";
 import ViewEnquiry from "./pages/ViewEnquiry";
-import ViewOrder from "./pages/ViewOrder";
+import EditOrder from "./pages/EditOrder";
+import ViewOrder from "./pages/View-Order/ViewOrder";
 
 function App() {
   axios.defaults.withCredentials = true;
@@ -45,7 +46,8 @@ function App() {
           <Route path="enquiries/:id" element={<ViewEnquiry />} />
 
           <Route path="orders" element={<Orders />} />
-          <Route path="order/:id" element={<ViewOrder />} />
+          <Route path="view-order/:id" element={<ViewOrder />} />
+          <Route path="edit-order/:id" element={<EditOrder />} />
 
           <Route path="customers" element={<Customers />} />
 
@@ -78,7 +80,7 @@ function App() {
           <Route path="coupon/:id" element={<AddCoupon />} />
         </Route>
         <Route path="/" element={<Login />} />
-        <Route path="/reset-Password" element={<ResetPassword />} />
+        <Route path="/reset-Password/:id" element={<ResetPassword />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
       </Routes>
     </Router>

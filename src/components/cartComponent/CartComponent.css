@@ -1,0 +1,35 @@
+.cart-quantity input {
+  cursor: pointer;
+}
+
+.cart-quantity {
+  display: flex;
+  flex-direction: row;
+}
+
+.cart-quantity div {
+  margin-top: -5px;
+}
+
+.link-secondary {
+  color: rgb(177, 39, 4);
+  font-weight: 700;
+  margin-left: 5px;
+  cursor: pointer;
+}
+
+.link-secondary:hover {
+  color: rgb(177, 39, 4);
+  font-weight: 700;
+}
+@media screen and (max-width: 1000px) {
+  .cart-quantity {
+    flex-direction: column;
+  }
+  .cart-quantity div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+  }
+}

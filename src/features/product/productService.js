@@ -17,7 +17,7 @@ const createProduct = async (data) => {
   return response.data;
 };
 const updateProduct = async (id, data) => {
-  const response = await axios.patch(API_URL + `${id}`, data);
+  const response = await axios.put(API_URL + `${id}`, data);
   return response.data;
 };
 

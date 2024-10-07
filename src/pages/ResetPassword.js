@@ -7,6 +7,7 @@ import { useFormik } from "formik";
 import * as Yup from "yup";
 import { resetPassword } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import resetImg from "../assets/forgot.png";
 
 let resetPasswordSchema = Yup.object().shape({
   password: Yup.string().required("Password is required"),
@@ -37,7 +38,7 @@ const ResetPassword = () => {
         .then((data) => {
           if (data.payload.message === "Password Updated") {
             toast.success("Password Updated");
-            navigate("/login");
+            navigate("/");
           }
         })
         .catch((error) => {
@@ -48,16 +49,12 @@ const ResetPassword = () => {
   });
   return (
     <ShowOnLogout>
-      <div
-        className="py-5"
-        style={{ background: "#ffd333", minHeight: "100vh" }}
-      >
-        <br />
-        <br />
-        <br />
-        <br />
-        <div className="my-5 w-25 bg-white rounded-3 mx-auto p-4">
-          <h3 className="text-center">Reset Password</h3>
+      <div className="auth-container">
+        <div className="auth-img">
+          <img src={resetImg} alt="Reset image" />
+        </div>
+        <div className="auth-card">
+          <h3 className="text-center">Reset password</h3>
           <p className="text-center">Please enter your new and password</p>
           <form
             action=""
@@ -68,9 +65,8 @@ const ResetPassword = () => {
               type="text"
               placeholder="Password"
               name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange("password")}
-              onBlur={formik.handleBlur("password")}
+              onCh={formik.handleChange("password")}
+              val={formik.values.password}
             />
             <div className="error">
               {formik.touched.password && formik.errors.password ? (
@@ -81,9 +77,8 @@ const ResetPassword = () => {
               type="text"
               placeholder="Confirm Password"
               name="confirmPassword"
-              value={formik.values.confirmPassword}
-              onChange={formik.handleChange("confirmPassword")}
-              onBlur={formik.handleBlur("confirmPassword")}
+              onCh={formik.handleChange("confirmPassword")}
+              val={formik.values.confirmPassword}
             />
             <div className="error">
               {formik.touched.confirmPassword &&

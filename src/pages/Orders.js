@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Table } from "antd";
 import { useDispatch, useSelector } from "react-redux";
 import { getOrders, updateOrderStatus } from "../features/order/orderSlice";
-import { AiFillDelete, AiOutlineEye } from "react-icons/ai";
+import { AiTwotoneEdit, AiOutlineEye } from "react-icons/ai";
 import { Link } from "react-router-dom";
 import { formatDate } from "../utils/importantFunctions";
 import Loader from "../components/loader/Loader";
@@ -23,10 +23,10 @@ const columns = [
     title: "Customer Info",
     dataIndex: "customerInfo",
   },
-  {
-    title: "View Order",
-    dataIndex: "viewOrder",
-  },
+  // {
+  //   title: "View Order",
+  //   dataIndex: "viewOrder",
+  // },
   {
     title: "Total Amount",
     dataIndex: "totalAmount",
@@ -78,34 +78,26 @@ const Orders = () => {
         orderDate: formattedDateString,
         customerInfo:
           orders?.[i]?.user?.firstName + orders?.[i]?.user?.lastName,
-        viewOrder: (
-          <Link className="" to={`/admin/order/${orders?.[i]?._id}`}>
-            Click Here
-          </Link>
-        ),
-        totalAmount: orders?.[i]?.totalPrice,
-        orderStatus: (
-          <select
-            className="form-control form-select"
-            onClick={(e) => {
-              handleStatus(e, orders?.[i]?._id, orders?.[i]?.orderStatus);
-            }}
-          >
-            <option defaultChecked>{orders?.[i]?.orderStatus}</option>
-            <option value="Not Processed">Not Processed</option>
-            <option value="Processing">Processing</option>
-            <option value="Dispatched">Dispatched</option>
-            <option value="Cancelled">Cancelled</option>
-            <option value="Delivered">Delivered</option>
-          </select>
-        ),
+        // viewOrder: (
+        //   <Link className="" to={`/admin/order/${orders?.[i]?._id}`}>
+        //     Click Here
+        //   </Link>
+        // ),
+        totalAmount: `₹${orders?.[i]?.totalPrice}`,
+        orderStatus: <p>{orders?.[i]?.orderStatus}</p>,
         action: (
           <div className="action-menu">
-            <Link className="ms-3 fs-2 text-danger" to="/">
+            <Link
+              className="ms-3 fs-2 text-danger"
+              to={`/admin/view-order/${orders?.[i]?._id}`}
+            >
               <AiOutlineEye className="fs-5" />
             </Link>
-            <Link className="ms-3 fs-2 text-danger" to="/">
-              <AiFillDelete className="fs-5" />
+            <Link
+              className="ms-3 fs-2 text-danger"
+              to={`/admin/edit-order/${orders?.[i]?._id}`}
+            >
+              <AiTwotoneEdit className="fs-5" />
             </Link>
           </div>
         ),

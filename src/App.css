@@ -31,11 +31,12 @@
 }
 
 .button {
-  background-color: var(--color-232f3e);
+  background-color: #007bff;
   color: white;
   font-size: 14px;
   padding: 13px 33px 13px 33px;
   border-radius: 25px;
+  text-align: center;
 }
 
 .button:hover {
@@ -43,9 +44,45 @@
   color: #131921;
 }
 
+/* login page */
+.auth-container {
+  max-width: 1000px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  margin: 0 auto;
+  padding: 0 15px;
+}
+
+.auth-container h3 {
+  color: orangered;
+}
+
+.auth-img {
+  flex: 60%;
+}
+
+.auth-card {
+  flex: 40%;
+}
+
+.auth-img img {
+  max-width: 100%;
+}
+
+.product-img {
+  max-width: 200px;
+}
+
 @media screen and (max-width: 500px) {
   .login-class {
     width: 100% !important;
     margin-top: 120px !important;
+  }
+
+  .auth-img {
+    display: none;
   }
 }
